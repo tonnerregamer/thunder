@@ -1,0 +1,467 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Portail de Gestion du Bot Thunder</title>
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap');
+        body {
+            font-family: "Inter", sans-serif;
+            background: #0a0a0a; /* Deep dark background */
+            color: #f0f0f0; /* Light text for contrast */
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+            margin: 0;
+            padding: 20px;
+            overflow-x: hidden; /* Prevent horizontal scroll */
+            position: relative; /* For electric effects */
+        }
+        body::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: 
+                radial-gradient(circle at 10% 20%, rgba(0, 230, 255, 0.1) 0%, transparent 50%),
+                radial-gradient(circle at 90% 80%, rgba(156, 39, 176, 0.1) 0%, transparent 50%);
+            pointer-events: none;
+            z-index: -1;
+        }
+        .container {
+            max-width: 1000px;
+            margin: 0 auto;
+            width: 100%;
+            flex-grow: 1;
+            display: flex;
+            flex-direction: column;
+            gap: 30px;
+            z-index: 1; /* Ensure content is above background effects */
+        }
+        .card {
+            background-color: #0f172a; /* Slightly lighter dark for cards */
+            border-radius: 0.75rem; /* rounded-xl */
+            padding: 2rem; /* p-8 */
+            box-shadow: 0 0 15px rgba(0, 230, 255, 0.1), 0 0 30px rgba(156, 39, 176, 0.05); /* Subtle glow */
+            border: 1px solid rgba(0, 230, 255, 0.2); /* Thin electric border */
+            display: flex;
+            flex-direction: column;
+            gap: 1.5rem;
+            transition: all 0.3s ease-in-out;
+        }
+        .card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 0 20px rgba(0, 230, 255, 0.3), 0 0 40px rgba(156, 39, 176, 0.1);
+        }
+        .button-primary {
+            background: linear-gradient(90deg, #00e6ff 0%, #9c27b0 100%); /* Electric gradient */
+            color: white;
+            padding: 0.9rem 2rem;
+            border-radius: 0.5rem; /* rounded-lg */
+            font-weight: 700; /* font-bold */
+            text-align: center;
+            transition: all 0.3s ease;
+            cursor: pointer;
+            text-decoration: none;
+            border: none;
+            box-shadow: 0 0 10px rgba(0, 230, 255, 0.4);
+        }
+        .button-primary:hover {
+            opacity: 0.9;
+            transform: scale(1.02);
+            box-shadow: 0 0 15px rgba(0, 230, 255, 0.6);
+        }
+        .input-field {
+            width: 100%;
+            padding: 0.75rem;
+            border-radius: 0.5rem;
+            border: 1px solid #00e6ff; /* Electric blue border */
+            background-color: #0f172a; /* Match card background */
+            color: #f0f0f0;
+            transition: border-color 0.3s ease, box-shadow 0.3s ease;
+        }
+        .input-field:focus {
+            outline: none;
+            border-color: #9c27b0; /* Purple on focus */
+            box-shadow: 0 0 8px rgba(156, 39, 176, 0.6);
+        }
+        textarea.input-field {
+            resize: vertical;
+            min-height: 120px;
+        }
+        .section-title {
+            font-size: 1.875rem; /* text-3xl */
+            font-weight: 800; /* font-extrabold */
+            color: #00e6ff; /* Electric blue for titles */
+            margin-bottom: 1.5rem;
+            text-shadow: 0 0 5px rgba(0, 230, 255, 0.5);
+        }
+        .status-message {
+            margin-top: 1rem;
+            padding: 0.75rem 1rem;
+            border-radius: 0.5rem;
+            font-weight: 600;
+        }
+        .status-success {
+            background-color: #22c55e30; /* Green with transparency */
+            color: #22c55e;
+            border: 1px solid #22c55e;
+        }
+        .status-error {
+            background-color: #ef444430; /* Red with transparency */
+            color: #ef4444;
+            border: 1px solid #ef4444;
+        }
+
+        /* Responsive adjustments */
+        @media (max-width: 768px) {
+            .container {
+                padding: 10px;
+                gap: 20px;
+            }
+            .card {
+                padding: 1.5rem;
+                gap: 1rem;
+            }
+            .section-title {
+                font-size: 1.5rem;
+            }
+            .button-primary {
+                padding: 0.75rem 1.25rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header class="text-center py-8">
+            <h1 class="text-5xl font-extrabold text-white leading-tight">Portail de Gestion du Bot <span class="text-sky-400">Thunder</span></h1>
+            <p class="text-lg text-gray-400 mt-3">Prenez le contrôle total des fonctionnalités de votre bot Discord depuis votre navigateur.</p>
+        </header>
+
+        <!-- Section Tableau de Bord -->
+        <div class="card">
+            <h2 class="section-title">Tableau de Bord</h2>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4 text-lg">
+                <p class="text-gray-300"><span class="font-semibold text-sky-300">Nom du Bot:</span> Thunder</p>
+                <p class="text-gray-300"><span class="font-semibold text-sky-300">Statut:</span> <span id="botStatusDisplay" class="text-yellow-400">Chargement...</span></p>
+                <p class="text-gray-300"><span class="font-semibold text-sky-300">ID du Bot:</span> 1388858198123089930</p>
+                <a href="https://discord.com/oauth2/authorize?client_id=1388858198123089930&permissions=8&scope=bot%20applications.commands" target="_blank" class="button-primary mt-2">
+                    Ajouter le bot à votre Discord
+                </a>
+            </div>
+        </div>
+
+        <!-- Section Configuration des Salons -->
+        <div class="card">
+            <h2 class="section-title">Configuration des Salons</h2>
+            <p class="text-gray-400">Configurez les salons de bienvenue, de départ, et d'autres ID importants pour votre bot.</p>
+            <div>
+                <label for="guildSettingsId" class="block text-gray-300 text-sm font-bold mb-2">ID du Serveur (Guilde) à configurer:</label>
+                <input type="text" id="guildSettingsId" class="input-field" placeholder="Ex: 123456789012345678" onchange="loadGuildSettings()">
+                <p class="text-sm text-gray-500 mt-1">Entrez l'ID du serveur et cliquez en dehors pour charger les paramètres existants.</p>
+            </div>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div>
+                    <label for="welcomeChannelId" class="block text-gray-300 text-sm font-bold mb-2">ID du Salon de Bienvenue:</label>
+                    <input type="text" id="welcomeChannelId" class="input-field" placeholder="Ex: 123456789012345678">
+                </div>
+                <div>
+                    <label for="goodbyeChannelId" class="block text-gray-300 text-sm font-bold mb-2">ID du Salon de Départ:</label>
+                    <input type="text" id="goodbyeChannelId" class="input-field" placeholder="Ex: 987654321098765432">
+                </div>
+                <div>
+                    <label for="modLogsChannelId" class="block text-gray-300 text-sm font-bold mb-2">ID du Salon de Logs Modération:</label>
+                    <input type="text" id="modLogsChannelId" class="input-field" placeholder="Ex: 1358792723594739752">
+                </div>
+                <div>
+                    <label for="adminRoleId" class="block text-gray-300 text-sm font-bold mb-2">ID du Rôle Admin:</label>
+                    <input type="text" id="adminRoleId" class="input-field" placeholder="Ex: 1055466068501606410">
+                </div>
+                <div>
+                    <label for="specialAdminRoleId" class="block text-gray-300 text-sm font-bold mb-2">ID du Rôle Admin Spécial:</label>
+                    <input type="text" id="specialAdminRoleId" class="input-field" placeholder="Ex: 1055467892096897034">
+                </div>
+                <div>
+                    <label for="suggestionSubmitChannelId" class="block text-gray-300 text-sm font-bold mb-2">ID Salon Soumission Suggestion:</label>
+                    <input type="text" id="suggestionSubmitChannelId" class="input-field" placeholder="Ex: 1358752185847910491">
+                </div>
+                <div>
+                    <label for="suggestionVotingChannelId" class="block text-gray-300 text-sm font-bold mb-2">ID Salon Vote Suggestion:</label>
+                    <input type="text" id="suggestionVotingChannelId" class="input-field" placeholder="Ex: 1358750781452582953">
+                </div>
+                <div>
+                    <label for="suggestionValidatedChannelId" class="block text-gray-300 text-sm font-bold mb-2">ID Salon Validé Suggestion:</label>
+                    <input type="text" id="suggestionValidatedChannelId" class="input-field" placeholder="Ex: 1388911701109510237">
+                </div>
+                <div>
+                    <label for="suggestionDeclinedChannelId" class="block text-gray-300 text-sm font-bold mb-2">ID Salon Décliné Suggestion:</label>
+                    <input type="text" id="suggestionDeclinedChannelId" class="input-field" placeholder="Ex: 1388911725314838698">
+                </div>
+                <div>
+                    <label for="suggestionOutcomeLogsChannelId" class="block text-gray-300 text-sm font-bold mb-2">ID Salon Logs Suggestion:</label>
+                    <input type="text" id="suggestionOutcomeLogsChannelId" class="input-field" placeholder="Ex: 1358792723594739752">
+                </div>
+            </div>
+            <button class="button-primary mt-4" onclick="saveBotSettings()">Sauvegarder les Paramètres du Bot</button>
+            <p id="settingsStatus" class="status-message hidden"></p>
+        </div>
+
+        <!-- Section Envoi de Message Personnalisé -->
+        <div class="card">
+            <h2 class="section-title">Envoyer un Message</h2>
+            <p class="text-gray-400">Envoyez un message personnalisé à n'importe quel salon sur un serveur où le bot se trouve.</p>
+            <div>
+                <label for="targetGuildId" class="block text-gray-300 text-sm font-bold mb-2">ID du Serveur (Guilde):</label>
+                <input type="text" id="targetGuildId" class="input-field" placeholder="Ex: 123456789012345678">
+            </div>
+            <div>
+                <label for="targetChannelId" class="block text-gray-300 text-sm font-bold mb-2">ID du Salon Cible:</label>
+                <input type="text" id="targetChannelId" class="input-field" placeholder="Ex: 123456789012345678">
+            </div>
+            <div>
+                <label for="messageContent" class="block text-gray-300 text-sm font-bold mb-2">Contenu du Message:</label>
+                <textarea id="messageContent" class="input-field" placeholder="Écrivez votre message ici..."></textarea>
+            </div>
+            <button class="button-primary mt-4" onclick="sendMessageToChannel()">Envoyer le Message</button>
+            <p id="messageStatus" class="status-message hidden"></p>
+        </div>
+
+        <!-- Section Gestion des Commandes Slash -->
+        <div class="card">
+            <h2 class="section-title">Gestion des Commandes Slash</h2>
+            <p class="text-gray-400">Synchronisez ou visualisez les commandes slash de votre bot.</p>
+            <button class="button-primary mt-4" onclick="syncCommands()">Synchroniser les Commandes Slash</button>
+            <p id="commandsStatus" class="status-message hidden"></p>
+        </div>
+        
+    </div>
+
+    <footer class="text-center py-8 text-gray-500 text-sm mt-auto">
+        &copy; 2023 Portail Bot Thunder. Tous droits réservés.
+    </footer>
+
+    <script>
+        const BOT_CLIENT_ID = '1388858198123089930'; // Replace with your actual bot client ID
+        // Utilise __api_origin__ si défini par l'environnement Canvas, sinon utilise localhost
+        const API_BASE_URL = typeof __api_origin__ !== 'undefined' ? __api_origin__ + '/api' : 'http://localhost:8080/api'; 
+
+        document.addEventListener('DOMContentLoaded', () => {
+            fetchBotStatus();
+        });
+
+        async function fetchBotStatus() {
+            const statusElement = document.getElementById('botStatusDisplay');
+            try {
+                const response = await fetch(`${API_BASE_URL}/status`);
+                if (response.ok) {
+                    const data = await response.json();
+                    statusElement.textContent = data.status === 'online' ? 'En Ligne' : 'Hors Ligne';
+                    statusElement.classList.remove('text-yellow-400', 'text-red-400');
+                    statusElement.classList.add(data.status === 'online' ? 'text-green-400' : 'text-red-400');
+                } else {
+                    statusElement.textContent = 'Hors Ligne (API inaccessible)';
+                    statusElement.classList.remove('text-yellow-400', 'text-green-400');
+                    statusElement.classList.add('text-red-400');
+                }
+            } catch (error) {
+                console.error('Erreur lors de la récupération du statut du bot:', error);
+                statusElement.textContent = 'Hors Ligne (Erreur réseau)';
+                statusElement.classList.remove('text-yellow-400', 'text-green-400');
+                statusElement.classList.add('text-red-400');
+            }
+        }
+
+        // Fonction pour charger les paramètres d'une guilde spécifique
+        async function loadGuildSettings() {
+            const guildId = document.getElementById('guildSettingsId').value;
+            const statusElement = document.getElementById('settingsStatus');
+            if (!guildId) {
+                statusElement.textContent = "Veuillez entrer un ID de serveur pour charger les paramètres.";
+                statusElement.classList.remove('hidden', 'status-success');
+                statusElement.classList.add('status-error');
+                clearSettingsFields(); // Vider les champs si l'ID est vide
+                return;
+            }
+
+            try {
+                const response = await fetch(`${API_BASE_URL}/settings/${guildId}`);
+                const settings = await response.json();
+                if (response.ok) {
+                    document.getElementById('welcomeChannelId').value = settings.welcome_channel_id || '';
+                    document.getElementById('goodbyeChannelId').value = settings.goodbye_channel_id || '';
+                    document.getElementById('modLogsChannelId').value = settings.mod_logs_channel_id || '';
+                    document.getElementById('adminRoleId').value = settings.admin_role_id || '';
+                    document.getElementById('specialAdminRoleId').value = settings.special_admin_role_id || '';
+                    document.getElementById('suggestionSubmitChannelId').value = settings.suggestion_submit_channel_id || '';
+                    document.getElementById('suggestionVotingChannelId').value = settings.suggestion_voting_channel_id || '';
+                    document.getElementById('suggestionValidatedChannelId').value = settings.suggestion_validated_channel_id || '';
+                    document.getElementById('suggestionDeclinedChannelId').value = settings.suggestion_declined_channel_id || '';
+                    document.getElementById('suggestionOutcomeLogsChannelId').value = settings.suggestion_outcome_logs_channel_id || '';
+                    
+                    statusElement.textContent = `Paramètres chargés pour le serveur ${guildId}.`;
+                    statusElement.classList.remove('hidden', 'status-error');
+                    statusElement.classList.add('status-success');
+                } else {
+                    // Si le serveur retourne une erreur (par exemple, 404 si la guilde n'a pas de paramètres personnalisés)
+                    // Nous pouvons soit afficher l'erreur, soit charger les valeurs par défaut
+                    console.error('Erreur lors du chargement des paramètres:', settings.error || 'Erreur inconnue');
+                    statusElement.textContent = `Aucun paramètre trouvé pour le serveur ${guildId}. Affichage des valeurs par défaut.`;
+                    statusElement.classList.remove('hidden', 'status-success');
+                    statusElement.classList.add('status-error');
+                    clearSettingsFields(); // Afficher des champs vides pour indiquer l'absence de paramètres personnalisés
+                }
+            } catch (error) {
+                console.error('Erreur réseau lors du chargement des paramètres:', error);
+                statusElement.textContent = 'Erreur réseau: Impossible de se connecter au bot pour charger les paramètres.';
+                statusElement.classList.remove('hidden', 'status-success');
+                statusElement.classList.add('status-error');
+                clearSettingsFields();
+            }
+        }
+
+        // Fonction pour vider tous les champs de paramètres
+        function clearSettingsFields() {
+            document.getElementById('welcomeChannelId').value = '';
+            document.getElementById('goodbyeChannelId').value = '';
+            document.getElementById('modLogsChannelId').value = '';
+            document.getElementById('adminRoleId').value = '';
+            document.getElementById('specialAdminRoleId').value = '';
+            document.getElementById('suggestionSubmitChannelId').value = '';
+            document.getElementById('suggestionVotingChannelId').value = '';
+            document.getElementById('suggestionValidatedChannelId').value = '';
+            document.getElementById('suggestionDeclinedChannelId').value = '';
+            document.getElementById('suggestionOutcomeLogsChannelId').value = '';
+        }
+
+        async function saveBotSettings() {
+            const guildId = document.getElementById('guildSettingsId').value;
+            const statusElement = document.getElementById('settingsStatus');
+
+            if (!guildId) {
+                statusElement.textContent = "Veuillez entrer l'ID du serveur pour sauvegarder les paramètres.";
+                statusElement.classList.remove('hidden', 'status-success');
+                statusElement.classList.add('status-error');
+                return;
+            }
+
+            const settings = {
+                guild_id: guildId, // Important: envoyer l'ID de la guilde
+                welcome_channel_id: document.getElementById('welcomeChannelId').value,
+                goodbye_channel_id: document.getElementById('goodbyeChannelId').value,
+                mod_logs_channel_id: document.getElementById('modLogsChannelId').value,
+                admin_role_id: document.getElementById('adminRoleId').value,
+                special_admin_role_id: document.getElementById('specialAdminRoleId').value,
+                suggestion_submit_channel_id: document.getElementById('suggestionSubmitChannelId').value,
+                suggestion_voting_channel_id: document.getElementById('suggestionVotingChannelId').value,
+                suggestion_validated_channel_id: document.getElementById('suggestionValidatedChannelId').value,
+                suggestion_declined_channel_id: document.getElementById('suggestionDeclinedChannelId').value,
+                suggestion_outcome_logs_channel_id: document.getElementById('suggestionOutcomeLogsChannelId').value,
+            };
+
+            try {
+                const response = await fetch(`${API_BASE_URL}/settings`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(settings)
+                });
+                const result = await response.json();
+                if (response.ok) {
+                    statusElement.textContent = `Paramètres sauvegardés pour le serveur ${guildId} : ${result.message}`;
+                    statusElement.classList.remove('status-error', 'hidden');
+                    statusElement.classList.add('status-success');
+                } else {
+                    statusElement.textContent = `Erreur lors de la sauvegarde : ${result.error || 'Erreur inconnue'}`;
+                    statusElement.classList.remove('status-success', 'hidden');
+                    statusElement.classList.add('status-error');
+                }
+            } catch (error) {
+                console.error('Erreur réseau lors de la sauvegarde des paramètres:', error);
+                statusElement.textContent = 'Erreur réseau: Impossible de se connecter au bot.';
+                statusElement.classList.remove('status-success', 'hidden');
+                statusElement.classList.add('status-error');
+            } finally {
+                statusElement.classList.remove('hidden');
+            }
+        }
+
+
+        async function sendMessageToChannel() {
+            const guildId = document.getElementById('targetGuildId').value; // Utilisez targetGuildId
+            const targetChannelId = document.getElementById('targetChannelId').value;
+            const messageContent = document.getElementById('messageContent').value;
+            const statusElement = document.getElementById('messageStatus');
+
+            if (!guildId || !targetChannelId || !messageContent) {
+                statusElement.textContent = "Veuillez remplir l'ID du serveur, l'ID du salon et le contenu du message.";
+                statusElement.classList.remove('status-success', 'hidden');
+                statusElement.classList.add('status-error');
+                return;
+            }
+
+            try {
+                const response = await fetch(`${API_BASE_URL}/message/send`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ guild_id: guildId, channel_id: targetChannelId, content: messageContent })
+                });
+                const result = await response.json();
+                if (response.ok) {
+                    statusElement.textContent = `Message envoyé au salon ${targetChannelId} sur le serveur ${guildId}.`;
+                    statusElement.classList.remove('status-error', 'hidden');
+                    statusElement.classList.add('status-success');
+                } else {
+                    statusElement.textContent = `Erreur lors de l'envoi : ${result.error || 'Erreur inconnue'}`;
+                    statusElement.classList.remove('status-success', 'hidden');
+                    statusElement.classList.add('status-error');
+                }
+            } catch (error) {
+                console.error('Erreur réseau lors de l\'envoi du message:', error);
+                statusElement.textContent = 'Erreur réseau: Impossible de se connecter au bot.';
+                statusElement.classList.remove('status-success', 'hidden');
+                statusElement.classList.add('status-error');
+            } finally {
+                statusElement.classList.remove('hidden');
+            }
+        }
+
+        async function syncCommands() {
+            const statusElement = document.getElementById('commandsStatus');
+            try {
+                const response = await fetch(`${API_BASE_URL}/commands/sync`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' }
+                });
+                const result = await response.json();
+                if (response.ok) {
+                    statusElement.textContent = `Synchronisation des commandes : ${result.message}`;
+                    statusElement.classList.remove('status-error', 'hidden');
+                    statusElement.classList.add('status-success');
+                } else {
+                    statusElement.textContent = `Erreur lors de la synchronisation : ${result.error || 'Erreur inconnue'}`;
+                    statusElement.classList.remove('status-success', 'hidden');
+                    statusElement.classList.add('status-error');
+                }
+            } catch (error) {
+                console.error('Erreur réseau lors de la synchronisation des commandes:', error);
+                statusElement.textContent = 'Erreur réseau: Impossible de se connecter au bot.';
+                statusElement.classList.remove('status-success', 'hidden');
+                statusElement.classList.add('status-error');
+            } finally {
+                statusElement.classList.remove('hidden');
+            }
+        }
+
+        // Add client ID to the Discord invite link
+        const addBotLink = document.querySelector('a[href*="YOUR_CLIENT_ID"]');
+        if (addBotLink) {
+            addBotLink.href = addBotLink.href.replace('YOUR_CLIENT_ID', BOT_CLIENT_ID); 
+        }
+    </script>
+</body>
+</html>
