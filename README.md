@@ -1,0 +1,2 @@
+# thunder
+un bot discord
