@@ -3,465 +3,425 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Portail de Gestion du Bot Thunder</title>
-    <!-- Tailwind CSS CDN -->
+    <title>Documentation du Bot Thunder - Cyber-Électrique</title>
+    <!-- Chargement de Tailwind CSS pour un style moderne et réactif -->
     <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700&family=Share+Tech+Mono&display=swap" rel="stylesheet">
     <style>
-        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap');
-        body {
-            font-family: "Inter", sans-serif;
-            background: #0a0a0a; /* Deep dark background */
-            color: #f0f0f0; /* Light text for contrast */
-            display: flex;
-            flex-direction: column;
-            min-height: 100vh;
-            margin: 0;
-            padding: 20px;
-            overflow-x: hidden; /* Prevent horizontal scroll */
-            position: relative; /* For electric effects */
+        /* Variables CSS pour les couleurs néon */
+        :root {
+            --neon-blue: #00ffff; /* Cyan vif */
+            --neon-pink: #ff00ff; /* Magenta vif */
+            --dark-bg: #03050a; /* Fond presque noir */
+            --mid-bg: #0c1016; /* Fond pour les sections */
+            --light-text: #e0f7fa; /* Texte très clair */
+            --code-bg: #010203; /* Fond pour les blocs de code */
         }
-        body::before {
+
+        /* Définition des polices et couleurs de base */
+        body {
+            font-family: 'Orbitron', sans-serif; /* Police futuriste pour les titres */
+            background-color: var(--dark-bg);
+            color: var(--light-text);
+            line-height: 1.7;
+            overflow-x: hidden; /* Empêche le défilement horizontal */
+            animation: background-pulse 30s infinite alternate; /* Animation subtile du fond */
+        }
+
+        /* Animation de fond (léger changement de teinte) */
+        @keyframes background-pulse {
+            from { background-color: #03050a; }
+            to { background-color: #050810; }
+        }
+
+        /* Style général des conteneurs */
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 2.5rem;
+            background-color: var(--mid-bg);
+            border-radius: 15px;
+            border: 2px solid var(--neon-blue); /* Bordure électrique principale */
+            box-shadow: 0 0 40px rgba(0, 255, 255, 0.6), inset 0 0 20px rgba(0, 255, 255, 0.3); /* Ombre et lueur interne */
+            position: relative;
+            overflow: hidden; /* Pour les effets de fond */
+        }
+
+        /* Effet de scanline/grille subtile pour le conteneur principal */
+        .container::before {
             content: '';
             position: absolute;
             top: 0;
             left: 0;
-            width: 100%;
-            height: 100%;
-            background: 
-                radial-gradient(circle at 10% 20%, rgba(0, 230, 255, 0.1) 0%, transparent 50%),
-                radial-gradient(circle at 90% 80%, rgba(156, 39, 176, 0.1) 0%, transparent 50%);
-            pointer-events: none;
-            z-index: -1;
-        }
-        .container {
-            max-width: 1000px;
-            margin: 0 auto;
-            width: 100%;
-            flex-grow: 1;
-            display: flex;
-            flex-direction: column;
-            gap: 30px;
-            z-index: 1; /* Ensure content is above background effects */
-        }
-        .card {
-            background-color: #0f172a; /* Slightly lighter dark for cards */
-            border-radius: 0.75rem; /* rounded-xl */
-            padding: 2rem; /* p-8 */
-            box-shadow: 0 0 15px rgba(0, 230, 255, 0.1), 0 0 30px rgba(156, 39, 176, 0.05); /* Subtle glow */
-            border: 1px solid rgba(0, 230, 255, 0.2); /* Thin electric border */
-            display: flex;
-            flex-direction: column;
-            gap: 1.5rem;
-            transition: all 0.3s ease-in-out;
-        }
-        .card:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 0 20px rgba(0, 230, 255, 0.3), 0 0 40px rgba(156, 39, 176, 0.1);
-        }
-        .button-primary {
-            background: linear-gradient(90deg, #00e6ff 0%, #9c27b0 100%); /* Electric gradient */
-            color: white;
-            padding: 0.9rem 2rem;
-            border-radius: 0.5rem; /* rounded-lg */
-            font-weight: 700; /* font-bold */
-            text-align: center;
-            transition: all 0.3s ease;
-            cursor: pointer;
-            text-decoration: none;
-            border: none;
-            box-shadow: 0 0 10px rgba(0, 230, 255, 0.4);
-        }
-        .button-primary:hover {
-            opacity: 0.9;
-            transform: scale(1.02);
-            box-shadow: 0 0 15px rgba(0, 230, 255, 0.6);
-        }
-        .input-field {
-            width: 100%;
-            padding: 0.75rem;
-            border-radius: 0.5rem;
-            border: 1px solid #00e6ff; /* Electric blue border */
-            background-color: #0f172a; /* Match card background */
-            color: #f0f0f0;
-            transition: border-color 0.3s ease, box-shadow 0.3s ease;
-        }
-        .input-field:focus {
-            outline: none;
-            border-color: #9c27b0; /* Purple on focus */
-            box-shadow: 0 0 8px rgba(156, 39, 176, 0.6);
-        }
-        textarea.input-field {
-            resize: vertical;
-            min-height: 120px;
-        }
-        .section-title {
-            font-size: 1.875rem; /* text-3xl */
-            font-weight: 800; /* font-extrabold */
-            color: #00e6ff; /* Electric blue for titles */
-            margin-bottom: 1.5rem;
-            text-shadow: 0 0 5px rgba(0, 230, 255, 0.5);
-        }
-        .status-message {
-            margin-top: 1rem;
-            padding: 0.75rem 1rem;
-            border-radius: 0.5rem;
-            font-weight: 600;
-        }
-        .status-success {
-            background-color: #22c55e30; /* Green with transparency */
-            color: #22c55e;
-            border: 1px solid #22c55e;
-        }
-        .status-error {
-            background-color: #ef444430; /* Red with transparency */
-            color: #ef4444;
-            border: 1px solid #ef4444;
+            right: 0;
+            bottom: 0;
+            background-image: linear-gradient(0deg, transparent 90%, rgba(0, 255, 255, 0.1) 100%), linear-gradient(90deg, transparent 90%, rgba(0, 255, 255, 0.1) 100%);
+            background-size: 5px 5px;
+            z-index: 0;
+            opacity: 0.1;
         }
 
-        /* Responsive adjustments */
-        @media (max-width: 768px) {
-            .container {
-                padding: 10px;
-                gap: 20px;
-            }
-            .card {
-                padding: 1.5rem;
-                gap: 1rem;
-            }
-            .section-title {
-                font-size: 1.5rem;
-            }
-            .button-primary {
-                padding: 0.75rem 1.25rem;
-            }
+        /* En-têtes avec effet néon plus intense */
+        h1, h2, h3 {
+            font-family: 'Orbitron', sans-serif;
+            font-weight: 700;
+            margin-bottom: 1.5rem;
+            text-shadow: 0 0 10px var(--neon-blue), 0 0 20px var(--neon-blue), 0 0 30px var(--neon-blue);
+            text-transform: uppercase;
+        }
+
+        h1 {
+            font-size: 4rem; /* Très grand pour le titre principal */
+            text-align: center;
+            padding-bottom: 2rem;
+            border-bottom: 4px solid var(--neon-pink); /* Bordure épaisse rose */
+            text-shadow: 0 0 15px var(--neon-pink), 0 0 30px var(--neon-pink), 0 0 45px var(--neon-pink);
+            margin-bottom: 3rem;
+            color: var(--neon-pink);
+        }
+
+        h2 {
+            font-size: 2.8rem;
+            margin-top: 3rem;
+            padding-left: 1.2rem;
+            border-left: 8px solid var(--neon-blue); /* Bordure très épaisse */
+            color: var(--neon-blue);
+        }
+
+        h3 {
+            font-size: 2.2rem;
+            margin-top: 2rem;
+            color: var(--neon-pink);
+            text-shadow: 0 0 8px var(--neon-pink);
+        }
+
+        /* Style des liens */
+        a {
+            color: var(--neon-blue);
+            text-decoration: none;
+            transition: color 0.3s ease, text-shadow 0.3s ease;
+            font-weight: bold;
+        }
+
+        a:hover {
+            color: var(--neon-pink);
+            text-shadow: 0 0 10px var(--neon-pink), 0 0 20px var(--neon-pink);
+        }
+
+        /* Sections de commande */
+        .command-section {
+            background-color: #121820; /* Plus de contraste avec le conteneur principal */
+            padding: 2rem;
+            border-radius: 12px;
+            margin-bottom: 2rem;
+            border: 1px solid var(--neon-blue); /* Bordure fine et électrique */
+            box-shadow: 0 0 20px rgba(0, 255, 255, 0.3);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .command-section:hover {
+            transform: translateY(-8px); /* Soulèvement plus prononcé */
+            box-shadow: 0 0 35px rgba(0, 255, 255, 0.7); /* Lueur plus intense au survol */
+        }
+
+        /* Conteneur pour les commandes */
+        .command-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr)); /* Min-width plus grand */
+            gap: 2rem; /* Espacement accru */
+        }
+
+        /* Cartes de commande individuelles */
+        .command-card {
+            background-color: #080c10; /* Fond encore plus sombre pour le contraste */
+            padding: 1.8rem;
+            border-radius: 10px;
+            box-shadow: 0 0 15px rgba(255, 0, 255, 0.2); /* Ombre rose subtile */
+            border: 1px dashed var(--neon-pink); /* Bordure en pointillé rose */
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            position: relative;
+        }
+
+        .command-card::after { /* Effet de bordure animée */
+            content: '';
+            position: absolute;
+            top: -2px; left: -2px; right: -2px; bottom: -2px;
+            border: 2px solid transparent;
+            border-radius: 10px;
+            background: linear-gradient(45deg, var(--neon-blue), var(--neon-pink)) border-box;
+            -webkit-mask: linear-gradient(#fff 0 0) padding-box, linear-gradient(#fff 0 0);
+            -webkit-mask-composite: destination-out;
+            mask-composite: exclude;
+            animation: border-glow 5s infinite linear;
+        }
+
+        @keyframes border-glow {
+            0% { border-image-slice: 1; border-image-source: linear-gradient(0deg, var(--neon-blue), var(--neon-pink)); }
+            25% { border-image-slice: 1; border-image-source: linear-gradient(90deg, var(--neon-blue), var(--neon-pink)); }
+            50% { border-image-slice: 1; border-image-source: linear-gradient(180deg, var(--neon-blue), var(--neon-pink)); }
+            75% { border-image-slice: 1; border-image-source: linear-gradient(270deg, var(--neon-blue), var(--neon-pink)); }
+            100% { border-image-slice: 1; border-image-source: linear-gradient(360deg, var(--neon-blue), var(--neon-pink)); }
+        }
+
+        .command-card:hover {
+            transform: scale(1.03); /* Zoom plus prononcé */
+            box-shadow: 0 0 25px rgba(255, 0, 255, 0.4); /* Ombre rose plus intense */
+        }
+
+        .command-card strong {
+            color: var(--neon-blue);
+            text-shadow: 0 0 5px var(--neon-blue);
+        }
+
+        .command-card code {
+            font-family: 'Share Tech Mono', monospace; /* Police monospace pour le code */
+            background-color: var(--code-bg);
+            padding: 0.4rem 0.7rem;
+            border-radius: 6px;
+            color: #72efdd; /* Vert/cyan clair pour le code */
+            border: 1px solid var(--neon-blue);
+            display: inline-block;
+            box-shadow: inset 0 0 5px rgba(0, 255, 255, 0.2);
+        }
+
+        /* Boutons avec effet électrique plus prononcé */
+        .btn-electric {
+            background: linear-gradient(45deg, var(--neon-blue), var(--neon-pink)); /* Dégradé pour le bouton */
+            color: var(--dark-bg); /* Texte sombre sur fond lumineux */
+            padding: 1.2rem 2.5rem; /* Padding accru */
+            border-radius: 12px;
+            font-weight: bold;
+            transition: all 0.3s ease;
+            box-shadow: 0 0 20px var(--neon-blue), 0 0 30px var(--neon-pink); /* Double ombre intense */
+            font-size: 1.2rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            border: none;
+            cursor: pointer;
+        }
+
+        .btn-electric:hover {
+            background: linear-gradient(45deg, var(--neon-pink), var(--neon-blue)); /* Inversion du dégradé au survol */
+            transform: scale(1.08) rotateZ(1deg); /* Léger zoom et rotation */
+            box-shadow: 0 0 25px var(--neon-pink), 0 0 40px var(--neon-blue);
+        }
+
+        /* Section recrutement admin */
+        .admin-recruitment {
+            background-color: #121820; /* Contraste amélioré */
+            padding: 3rem; /* Padding accru */
+            border-radius: 20px; /* Rayon de bordure plus prononcé */
+            border: 3px solid var(--neon-pink); /* Bordure très épaisse */
+            box-shadow: 0 0 40px rgba(255, 0, 255, 0.7), inset 0 0 25px rgba(255, 0, 255, 0.4); /* Ombre et lueur interne */
+            margin-top: 3.5rem;
+            text-align: center;
+        }
+
+        .admin-recruitment p {
+            font-size: 1.2rem; /* Taille de police légèrement augmentée */
+            margin-bottom: 2rem;
+            color: var(--light-text);
+        }
+
+        /* Footer */
+        footer {
+            text-align: center;
+            padding: 2.5rem;
+            margin-top: 3.5rem;
+            border-top: 2px solid rgba(0, 255, 255, 0.5); /* Bordure plus visible */
+            color: #92a4b8; /* Texte légèrement plus clair */
+            font-family: 'Share Tech Mono', monospace;
+        }
+
+        /* Scrollbar customisée (pour un look plus cyberpunk) */
+        ::-webkit-scrollbar {
+            width: 12px;
+        }
+
+        ::-webkit-scrollbar-track {
+            background: #080c10; /* Correspond au nouveau fond */
+            border-radius: 10px;
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: var(--neon-pink);
+            border-radius: 10px;
+            border: 3px solid #080c10; /* Correspond au nouveau fond */
+        }
+
+        ::-webkit-scrollbar-thumb:hover {
+            background: var(--neon-blue);
         }
     </style>
 </head>
-<body>
-    <div class="container">
-        <header class="text-center py-8">
-            <h1 class="text-5xl font-extrabold text-white leading-tight">Portail de Gestion du Bot <span class="text-sky-400">Thunder</span></h1>
-            <p class="text-lg text-gray-400 mt-3">Prenez le contrôle total des fonctionnalités de votre bot Discord depuis votre navigateur.</p>
-        </header>
+<body class="leading-normal tracking-normal">
 
-        <!-- Section Tableau de Bord -->
-        <div class="card">
-            <h2 class="section-title">Tableau de Bord</h2>
-            <div class="grid grid-cols-1 md:grid-cols-2 gap-4 text-lg">
-                <p class="text-gray-300"><span class="font-semibold text-sky-300">Nom du Bot:</span> Thunder</p>
-                <p class="text-gray-300"><span class="font-semibold text-sky-300">Statut:</span> <span id="botStatusDisplay" class="text-yellow-400">Chargement...</span></p>
-                <p class="text-gray-300"><span class="font-semibold text-sky-300">ID du Bot:</span> 1388858198123089930</p>
-                <a href="https://discord.com/oauth2/authorize?client_id=1388858198123089930&permissions=8&scope=bot%20applications.commands" target="_blank" class="button-primary mt-2">
-                    Ajouter le bot à votre Discord
+    <header class="py-8 px-4 bg-gray-950 shadow-2xl border-b-4 border-neon-blue">
+        <div class="container mx-auto flex flex-col md:flex-row justify-between items-center z-10">
+            <h1 class="text-4xl md:text-5xl font-extrabold text-neon-pink mb-4 md:mb-0">Documentation ThunderBot</h1>
+            <nav>
+                <ul class="flex flex-wrap justify-center space-x-4 md:space-x-8">
+                    <li><a href="#commands" class="text-xl text-neon-blue hover:text-neon-pink transition duration-300 transform hover:scale-110">COMMANDES</a></li>
+                    <li><a href="#moderation" class="text-xl text-neon-blue hover:text-neon-pink transition duration-300 transform hover:scale-110">MODÉRATION</a></li>
+                    <li><a href="#suggestions" class="text-xl text-neon-blue hover:text-neon-pink transition duration-300 transform hover:scale-110">SUGGESTIONS</a></li>
+                    <li><a href="#recruitment" class="text-xl text-neon-blue hover:text-neon-pink transition duration-300 transform hover:scale-110">RECRUTEMENT ADMIN</a></li>
+                </ul>
+            </nav>
+        </div>
+    </header>
+
+    <main class="container mx-auto my-12 relative z-10">
+        <section id="introduction" class="text-center mb-16 p-10 bg-gray-900 rounded-lg shadow-2xl border-2 border-neon-pink">
+            <h2 class="text-5xl font-bold mb-6 text-neon-blue">Bienvenue dans la documentation officielle de ThunderBot !</h2>
+            <p class="text-xl text-light-text mb-6">
+                ThunderBot est votre assistant cybernétique ultime pour gérer et animer votre serveur Discord. 
+                De la modération avancée à la gestion des suggestions et des événements dynamiques, 
+                ThunderBot est programmé pour rendre votre communauté plus interactive, sécurisée et électrisante.
+            </p>
+            <p class="text-xl text-light-text mt-4">
+                Explorez nos protocoles et commandes ci-dessous pour maîtriser tout le potentiel de cette IA.
+            </p>
+        </section>
+
+        <section id="commands" class="mb-16">
+            <h2 class="text-4xl mb-8 text-neon-pink border-l-8 border-neon-blue pl-6">Commandes Générales - Fonctions Utilitaires</h2>
+            <div class="command-grid">
+                <div class="command-card">
+                    <h3><code>/multiplication &lt;a&gt; &lt;b&gt;</code></h3>
+                    <p class="text-light-text"><strong>Description:</strong> Effectue une opération de multiplication entre deux valeurs numériques. Initiates a numerical product calculation.</p>
+                    <p class="text-light-text"><strong>Exemple:</strong> <code>/multiplication 5 10</code> retournera <code>50</code>. Output will be <code>50</code>.</p>
+                </div>
+                <div class="command-card">
+                    <h3><code>/repete &lt;nombre&gt; &lt;message&gt;</code></h3>
+                    <p class="text-light-text"><strong>Description:</strong> Répète un message spécifié un nombre défini de fois. Iterates message output.</p>
+                    <p class="text-light-text"><strong>Exemple:</strong> <code>/repete 3 Bonjour</code> enverra "Bonjour" trois fois. Will output "Bonjour" thrice.</p>
+                </div>
+                <div class="command-card">
+                    <h3><code>/attends &lt;secondes&gt;</code></h3>
+                    <p class="text-light-text"><strong>Description:</strong> Met le bot en mode pause pour une durée spécifiée en secondes. Initiates bot dormancy sequence.</p>
+                    <p class="text-light-text"><strong>Exemple:</strong> <code>/attends 5</code> fera une pause de 5 secondes. Will pause for 5 seconds.</p>
+                </div>
+                <div class="command-card">
+                    <h3><code>/bienvenue &lt;membre&gt;</code></h3>
+                    <p class="text-light-text"><strong>Description:</strong> Active le protocole d'accueil pour un membre désigné dans le canal d'accueil configuré. Triggers welcome protocol.</p>
+                    <p class="text-light-text"><strong>Exemple:</strong> <code>/bienvenue @NomDuMembre</code></p>
+                </div>
+                <div class="command-card">
+                    <h3><code>/reverse &lt;texte&gt;</code></h3>
+                    <p class="text-light-text"><strong>Description:</strong> Inverse la séquence des caractères d'un texte donné. Reverses character string.</p>
+                    <p class="text-light-text"><strong>Exemple:</strong> <code>/reverse Salut</code> retournera <code>tulaS</code>.</p>
+                </div>
+                <div class="command-card">
+                    <h3><code>/mock &lt;texte&gt;</code></h3>
+                    <p class="text-light-text"><strong>Description:</strong> Transforme un texte en alternant les majuscules et minuscules. Applies sarcastic capitalization filter.</p>
+                    <p class="text-light-text"><strong>Exemple:</strong> <code>/mock C'est drôle</code> retournera <code>c'EsT dRôLe</code>.</p>
+                </div>
+                <div class="command-card">
+                    <h3><code>/clap &lt;texte&gt;</code></h3>
+                    <p class="text-light-text"><strong>Description:</strong> Insère l'emoji 👏 entre chaque mot du texte. Inserts applause emoji between words.</p>
+                    <p class="text-light-text"><strong>Exemple:</strong> <code>/clap C'est super</code> retournera <code>C'est 👏 super</code>.</p>
+                </div>
+                <div class="command-card">
+                    <h3><code>/internet</code></h3>
+                    <p class="text-light-text"><strong>Description:</strong> Fournit un hyperlien vers une interface de jeu de type clicker. Provides link to clicker game interface.</p>
+                    <p class="text-light-text"><strong>Exemple:</strong> <code>/internet</code></p>
+                </div>
+            </div>
+        </section>
+
+        <section id="moderation" class="mb-16">
+            <h2 class="text-4xl mb-8 text-neon-blue border-l-8 border-neon-pink pl-6">Commandes de Modération - Contrôle d'Accès</h2>
+            <p class="text-xl text-light-text mb-8">
+                Ces protocoles sont restreints aux opérateurs et administrateurs accrédités. Des autorisations de niveau supérieur sont requises pour leur exécution.
+            </p>
+            <div class="command-grid">
+                <div class="command-card">
+                    <h3><code>/kick &lt;membre&gt; [raison]</code></h3>
+                    <p class="text-light-text"><strong>Description:</strong> Exécute l'expulsion d'un membre du réseau du serveur. Une justification est optionnelle. Ejects a member from the server grid.</p>
+                    <p class="text-light-text"><strong>Permissions:</strong> Requiert le rôle <code>ROLE_ADMIN_ID</code> et l'autorisation de déconnexion. Requires <code>ROLE_ADMIN_ID</code> and kick permissions.</p>
+                    <p class="text-light-text"><strong>Exemple:</strong> <code>/kick @MauvaisUtilisateur Spam</code></p>
+                </div>
+                <div class="command-card">
+                    <h3><code>/ban &lt;membre&gt; [raison]</code></h3>
+                    <p class="text-light-text"><strong>Description:</strong> Applique un protocole de bannissement définitif à un membre du serveur. Une justification est optionnelle. Implements a permanent server ban protocol.</p>
+                    <p class="text-light-text"><strong>Permissions:</strong> Requiert le rôle <code>ROLE_ADMIN_ID</code> et l'autorisation de bannissement. Requires <code>ROLE_ADMIN_ID</code> and ban permissions.</p>
+                    <p class="text-light-text"><strong>Exemple:</strong> <code>/ban @TrollForever Infraction grave</code></p>
+                </div>
+                <div class="command-card">
+                    <h3><code>/warn &lt;membre&gt; [raison]</code></h3>
+                    <p class="text-light-text"><strong>Description:</strong> Transmet un avertissement formel à un membre, idéalement via message privé. Une justification est optionnelle. Issues a formal warning to a member, preferably via DM.</p>
+                    <p class="text-light-text"><strong>Permissions:</strong> Requiert le rôle <code>ROLE_ADMIN_ID</code>. Requires <code>ROLE_ADMIN_ID</code>.</p>
+                    <p class="text-light-text"><strong>Exemple:</strong> <code>/warn @MembreDiscutable Langage inapproprié</code></p>
+                </div>
+                <div class="command-card">
+                    <h3><code>/clear &lt;nombre&gt;</code></h3>
+                    <p class="text-light-text"><strong>Description:</strong> Efface un volume spécifié de messages dans le canal actif. Clears a specified number of messages in the active channel.</p>
+                    <p class="text-light-text"><strong>Permissions:</strong> Requiert le rôle <code>ROLE_ADMIN_ID</code> et l'autorisation <code>Gérer les messages</code>. Requires <code>ROLE_ADMIN_ID</code> and <code>Manage Messages</code> permission.</p>
+                    <p class="text-light-text"><strong>Exemple:</strong> <code>/clear 50</code> (supprime les 50 derniers messages + la commande)</p>
+                </div>
+            </div>
+        </section>
+
+        <section id="suggestions" class="mb-16">
+            <h2 class="text-4xl mb-8 text-neon-pink border-l-8 border-neon-blue pl-6">Système de Suggestions - Évolution Collaborative</h2>
+            <p class="text-xl text-light-text mb-8">
+                Le système de suggestion permet aux unités membres de soumettre des idéations et à la communauté de procéder à une validation par vote.
+            </p>
+            <div class="command-grid">
+                <div class="command-card">
+                    <h3><code>/suggestion &lt;contenu&gt;</code></h3>
+                    <p class="text-light-text"><strong>Description:</strong> Initialise une nouvelle proposition pour évaluation. Elle sera diffusée dans le canal de vote désigné. Initiates a new proposal for evaluation.</p>
+                    <p class="text-light-text"><strong>Fonctionnement:</strong> La proposition est affichée avec des interfaces de vote "Oui" et "Non". Après une période de 24 heures, le système finalise la proposition en fonction des résultats du vote : approbation (majorité 'oui'), déclinaison (majorité 'non'), ou état indécis (égalité/absence de vote, nécessitant une décision administrative). Displays proposal with 'Yes' and 'No' voting interfaces.</p>
+                    <p class="text-light-text"><strong>Exemple:</strong> <code>/suggestion Ajoutez un rôle pour les artistes !</code></p>
+                </div>
+                <div class="command-card">
+                    <h3>Finalisation Automatique / Décision Administrative</h3>
+                    <p class="text-light-text"><strong>Description:</strong> Le système gère l'achèvement des propositions après un délai temporel de 24 heures. System manages proposal completion after 24-hour interval.</p>
+                    <ul class="list-disc list-inside text-left mx-auto text-light-text">
+                        <li class="mb-2"><strong>Vote majoritaire Oui:</strong> La proposition est validée et transférée vers le canal des propositions acceptées. Proposal validated and transferred to accepted proposals channel.</li>
+                        <li class="mb-2"><strong>Vote majoritaire Non:</strong> La proposition est rejetée et transférée vers le canal des propositions déclinées. Proposal rejected and transferred to declined proposals channel.</li>
+                        <li class="mb-2"><strong>Égalité des votes ou absence de vote:</strong> La proposition est réactivée dans le canal de vote avec des interfaces "Décision administrative (Approuver)" et "Décision administrative (Décliner)", nécessitant une intervention du <code>ROLE_SPECIAL_ADMIN_ID</code>. Proposal reactivated for administrative decision.</li>
+                    </ul>
+                </div>
+            </div>
+        </section>
+
+        <section id="recruitment" class="admin-recruitment">
+            <h2 class="text-4xl font-bold mb-6 text-neon-blue">Recrutement d'Administrateurs - Joignez le Core</h2>
+            <p class="text-xl text-light-text">
+                Nous sommes en quête constante d'unités dédiées et fiables pour l'intégration à notre équipe d'administration. 
+                En tant qu'administrateur, votre fonction sera critique dans la gestion du réseau, 
+                l'application des protocoles et l'assistance à la matrice communautaire.
+            </p>
+            <p class="text-2xl font-semibold mb-6 text-neon-pink">Critères d'Admission :</p>
+            <ul class="list-disc list-inside text-left mx-auto max-w-xl text-light-text mb-8">
+                <li class="mb-3"><strong>Maturité et Responsabilité :</strong> Capacité à exécuter des décisions équitables et non-biaisées.</li>
+                <li class="mb-3"><strong>Connaissance des Règles :</strong> Maîtrise absolue des protocoles du serveur et de l'environnement Discord.</li>
+                <li class="mb-3"><strong>Activité :</strong> Présence opérationnelle régulière sur le serveur.</li>
+                <li class="mb-3"><strong>Esprit d'Équipe :</strong> Capacité à opérer en synergie avec les autres membres de l'unité d'équipe.</li>
+                <li class="mb-3"><strong>Expérience :</strong> Toute expérience préexistante en modération ou administration constitue un avantage significatif.</li>
+            </ul>
+            <p class="text-2xl font-semibold mb-6 text-neon-pink">Procédure de Candidature :</p>
+            <p class="text-xl text-light-text mb-8">
+                Si votre profil correspond à ces spécifications et que vous souhaitez contribuer activement à notre matrice, 
+                établissez la connexion directement sur notre serveur Discord via le lien : 
+                <a href="https://discord.gg/M4PVueAWUR" target="_blank" class="text-neon-blue hover:text-neon-pink block mt-4 text-2xl font-bold text-shadow-neon transition duration-300">
+                    <span class="inline-block p-4 rounded-lg bg-gradient-to-r from-purple-700 to-pink-700 border-2 border-neon-pink shadow-lg hover:shadow-xl transform hover:scale-105">
+                        CLIQUEZ ICI POUR REJOINDRE LE SERVEUR DISCORD
+                    </span>
                 </a>
-            </div>
-        </div>
+                <span class="block mt-6">
+                    ou transmettez un message privé à un administrateur existant pour exprimer votre intérêt et fournir un bref résumé de votre motivation et de votre expérience.
+                </span>
+            </p>
+            <button class="btn-electric hover:bg-pink-600">Rejoignez notre équipe d'Opérateurs !</button>
+        </section>
+    </main>
 
-        <!-- Section Configuration des Salons -->
-        <div class="card">
-            <h2 class="section-title">Configuration des Salons</h2>
-            <p class="text-gray-400">Configurez les salons de bienvenue, de départ, et d'autres ID importants pour votre bot.</p>
-            <div>
-                <label for="guildSettingsId" class="block text-gray-300 text-sm font-bold mb-2">ID du Serveur (Guilde) à configurer:</label>
-                <input type="text" id="guildSettingsId" class="input-field" placeholder="Ex: 123456789012345678" onchange="loadGuildSettings()">
-                <p class="text-sm text-gray-500 mt-1">Entrez l'ID du serveur et cliquez en dehors pour charger les paramètres existants.</p>
-            </div>
-            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-                <div>
-                    <label for="welcomeChannelId" class="block text-gray-300 text-sm font-bold mb-2">ID du Salon de Bienvenue:</label>
-                    <input type="text" id="welcomeChannelId" class="input-field" placeholder="Ex: 123456789012345678">
-                </div>
-                <div>
-                    <label for="goodbyeChannelId" class="block text-gray-300 text-sm font-bold mb-2">ID du Salon de Départ:</label>
-                    <input type="text" id="goodbyeChannelId" class="input-field" placeholder="Ex: 987654321098765432">
-                </div>
-                <div>
-                    <label for="modLogsChannelId" class="block text-gray-300 text-sm font-bold mb-2">ID du Salon de Logs Modération:</label>
-                    <input type="text" id="modLogsChannelId" class="input-field" placeholder="Ex: 1358792723594739752">
-                </div>
-                <div>
-                    <label for="adminRoleId" class="block text-gray-300 text-sm font-bold mb-2">ID du Rôle Admin:</label>
-                    <input type="text" id="adminRoleId" class="input-field" placeholder="Ex: 1055466068501606410">
-                </div>
-                <div>
-                    <label for="specialAdminRoleId" class="block text-gray-300 text-sm font-bold mb-2">ID du Rôle Admin Spécial:</label>
-                    <input type="text" id="specialAdminRoleId" class="input-field" placeholder="Ex: 1055467892096897034">
-                </div>
-                <div>
-                    <label for="suggestionSubmitChannelId" class="block text-gray-300 text-sm font-bold mb-2">ID Salon Soumission Suggestion:</label>
-                    <input type="text" id="suggestionSubmitChannelId" class="input-field" placeholder="Ex: 1358752185847910491">
-                </div>
-                <div>
-                    <label for="suggestionVotingChannelId" class="block text-gray-300 text-sm font-bold mb-2">ID Salon Vote Suggestion:</label>
-                    <input type="text" id="suggestionVotingChannelId" class="input-field" placeholder="Ex: 1358750781452582953">
-                </div>
-                <div>
-                    <label for="suggestionValidatedChannelId" class="block text-gray-300 text-sm font-bold mb-2">ID Salon Validé Suggestion:</label>
-                    <input type="text" id="suggestionValidatedChannelId" class="input-field" placeholder="Ex: 1388911701109510237">
-                </div>
-                <div>
-                    <label for="suggestionDeclinedChannelId" class="block text-gray-300 text-sm font-bold mb-2">ID Salon Décliné Suggestion:</label>
-                    <input type="text" id="suggestionDeclinedChannelId" class="input-field" placeholder="Ex: 1388911725314838698">
-                </div>
-                <div>
-                    <label for="suggestionOutcomeLogsChannelId" class="block text-gray-300 text-sm font-bold mb-2">ID Salon Logs Suggestion:</label>
-                    <input type="text" id="suggestionOutcomeLogsChannelId" class="input-field" placeholder="Ex: 1358792723594739752">
-                </div>
-            </div>
-            <button class="button-primary mt-4" onclick="saveBotSettings()">Sauvegarder les Paramètres du Bot</button>
-            <p id="settingsStatus" class="status-message hidden"></p>
-        </div>
-
-        <!-- Section Envoi de Message Personnalisé -->
-        <div class="card">
-            <h2 class="section-title">Envoyer un Message</h2>
-            <p class="text-gray-400">Envoyez un message personnalisé à n'importe quel salon sur un serveur où le bot se trouve.</p>
-            <div>
-                <label for="targetGuildId" class="block text-gray-300 text-sm font-bold mb-2">ID du Serveur (Guilde):</label>
-                <input type="text" id="targetGuildId" class="input-field" placeholder="Ex: 123456789012345678">
-            </div>
-            <div>
-                <label for="targetChannelId" class="block text-gray-300 text-sm font-bold mb-2">ID du Salon Cible:</label>
-                <input type="text" id="targetChannelId" class="input-field" placeholder="Ex: 123456789012345678">
-            </div>
-            <div>
-                <label for="messageContent" class="block text-gray-300 text-sm font-bold mb-2">Contenu du Message:</label>
-                <textarea id="messageContent" class="input-field" placeholder="Écrivez votre message ici..."></textarea>
-            </div>
-            <button class="button-primary mt-4" onclick="sendMessageToChannel()">Envoyer le Message</button>
-            <p id="messageStatus" class="status-message hidden"></p>
-        </div>
-
-        <!-- Section Gestion des Commandes Slash -->
-        <div class="card">
-            <h2 class="section-title">Gestion des Commandes Slash</h2>
-            <p class="text-gray-400">Synchronisez ou visualisez les commandes slash de votre bot.</p>
-            <button class="button-primary mt-4" onclick="syncCommands()">Synchroniser les Commandes Slash</button>
-            <p id="commandsStatus" class="status-message hidden"></p>
-        </div>
-        
-    </div>
-
-    <footer class="text-center py-8 text-gray-500 text-sm mt-auto">
-        &copy; 2023 Portail Bot Thunder. Tous droits réservés.
+    <footer class="py-10 px-4 bg-gray-950 border-t-4 border-neon-blue">
+        <p>&copy; 2025 ThunderBot. Tous droits réservés. Cybernetic Integrity Maintained.</p>
+        <p>Propulsé par ⚡ Discord.py & le Cadre Tailwind CSS v3.0</p>
     </footer>
 
-    <script>
-        const BOT_CLIENT_ID = '1388858198123089930'; // Replace with your actual bot client ID
-        // Utilise __api_origin__ si défini par l'environnement Canvas, sinon utilise localhost
-        const API_BASE_URL = typeof __api_origin__ !== 'undefined' ? __api_origin__ + '/api' : 'http://localhost:8080/api'; 
-
-        document.addEventListener('DOMContentLoaded', () => {
-            fetchBotStatus();
-        });
-
-        async function fetchBotStatus() {
-            const statusElement = document.getElementById('botStatusDisplay');
-            try {
-                const response = await fetch(`${API_BASE_URL}/status`);
-                if (response.ok) {
-                    const data = await response.json();
-                    statusElement.textContent = data.status === 'online' ? 'En Ligne' : 'Hors Ligne';
-                    statusElement.classList.remove('text-yellow-400', 'text-red-400');
-                    statusElement.classList.add(data.status === 'online' ? 'text-green-400' : 'text-red-400');
-                } else {
-                    statusElement.textContent = 'Hors Ligne (API inaccessible)';
-                    statusElement.classList.remove('text-yellow-400', 'text-green-400');
-                    statusElement.classList.add('text-red-400');
-                }
-            } catch (error) {
-                console.error('Erreur lors de la récupération du statut du bot:', error);
-                statusElement.textContent = 'Hors Ligne (Erreur réseau)';
-                statusElement.classList.remove('text-yellow-400', 'text-green-400');
-                statusElement.classList.add('text-red-400');
-            }
-        }
-
-        // Fonction pour charger les paramètres d'une guilde spécifique
-        async function loadGuildSettings() {
-            const guildId = document.getElementById('guildSettingsId').value;
-            const statusElement = document.getElementById('settingsStatus');
-            if (!guildId) {
-                statusElement.textContent = "Veuillez entrer un ID de serveur pour charger les paramètres.";
-                statusElement.classList.remove('hidden', 'status-success');
-                statusElement.classList.add('status-error');
-                clearSettingsFields(); // Vider les champs si l'ID est vide
-                return;
-            }
-
-            try {
-                const response = await fetch(`${API_BASE_URL}/settings/${guildId}`);
-                const settings = await response.json();
-                if (response.ok) {
-                    document.getElementById('welcomeChannelId').value = settings.welcome_channel_id || '';
-                    document.getElementById('goodbyeChannelId').value = settings.goodbye_channel_id || '';
-                    document.getElementById('modLogsChannelId').value = settings.mod_logs_channel_id || '';
-                    document.getElementById('adminRoleId').value = settings.admin_role_id || '';
-                    document.getElementById('specialAdminRoleId').value = settings.special_admin_role_id || '';
-                    document.getElementById('suggestionSubmitChannelId').value = settings.suggestion_submit_channel_id || '';
-                    document.getElementById('suggestionVotingChannelId').value = settings.suggestion_voting_channel_id || '';
-                    document.getElementById('suggestionValidatedChannelId').value = settings.suggestion_validated_channel_id || '';
-                    document.getElementById('suggestionDeclinedChannelId').value = settings.suggestion_declined_channel_id || '';
-                    document.getElementById('suggestionOutcomeLogsChannelId').value = settings.suggestion_outcome_logs_channel_id || '';
-                    
-                    statusElement.textContent = `Paramètres chargés pour le serveur ${guildId}.`;
-                    statusElement.classList.remove('hidden', 'status-error');
-                    statusElement.classList.add('status-success');
-                } else {
-                    // Si le serveur retourne une erreur (par exemple, 404 si la guilde n'a pas de paramètres personnalisés)
-                    // Nous pouvons soit afficher l'erreur, soit charger les valeurs par défaut
-                    console.error('Erreur lors du chargement des paramètres:', settings.error || 'Erreur inconnue');
-                    statusElement.textContent = `Aucun paramètre trouvé pour le serveur ${guildId}. Affichage des valeurs par défaut.`;
-                    statusElement.classList.remove('hidden', 'status-success');
-                    statusElement.classList.add('status-error');
-                    clearSettingsFields(); // Afficher des champs vides pour indiquer l'absence de paramètres personnalisés
-                }
-            } catch (error) {
-                console.error('Erreur réseau lors du chargement des paramètres:', error);
-                statusElement.textContent = 'Erreur réseau: Impossible de se connecter au bot pour charger les paramètres.';
-                statusElement.classList.remove('hidden', 'status-success');
-                statusElement.classList.add('status-error');
-                clearSettingsFields();
-            }
-        }
-
-        // Fonction pour vider tous les champs de paramètres
-        function clearSettingsFields() {
-            document.getElementById('welcomeChannelId').value = '';
-            document.getElementById('goodbyeChannelId').value = '';
-            document.getElementById('modLogsChannelId').value = '';
-            document.getElementById('adminRoleId').value = '';
-            document.getElementById('specialAdminRoleId').value = '';
-            document.getElementById('suggestionSubmitChannelId').value = '';
-            document.getElementById('suggestionVotingChannelId').value = '';
-            document.getElementById('suggestionValidatedChannelId').value = '';
-            document.getElementById('suggestionDeclinedChannelId').value = '';
-            document.getElementById('suggestionOutcomeLogsChannelId').value = '';
-        }
-
-        async function saveBotSettings() {
-            const guildId = document.getElementById('guildSettingsId').value;
-            const statusElement = document.getElementById('settingsStatus');
-
-            if (!guildId) {
-                statusElement.textContent = "Veuillez entrer l'ID du serveur pour sauvegarder les paramètres.";
-                statusElement.classList.remove('hidden', 'status-success');
-                statusElement.classList.add('status-error');
-                return;
-            }
-
-            const settings = {
-                guild_id: guildId, // Important: envoyer l'ID de la guilde
-                welcome_channel_id: document.getElementById('welcomeChannelId').value,
-                goodbye_channel_id: document.getElementById('goodbyeChannelId').value,
-                mod_logs_channel_id: document.getElementById('modLogsChannelId').value,
-                admin_role_id: document.getElementById('adminRoleId').value,
-                special_admin_role_id: document.getElementById('specialAdminRoleId').value,
-                suggestion_submit_channel_id: document.getElementById('suggestionSubmitChannelId').value,
-                suggestion_voting_channel_id: document.getElementById('suggestionVotingChannelId').value,
-                suggestion_validated_channel_id: document.getElementById('suggestionValidatedChannelId').value,
-                suggestion_declined_channel_id: document.getElementById('suggestionDeclinedChannelId').value,
-                suggestion_outcome_logs_channel_id: document.getElementById('suggestionOutcomeLogsChannelId').value,
-            };
-
-            try {
-                const response = await fetch(`${API_BASE_URL}/settings`, {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify(settings)
-                });
-                const result = await response.json();
-                if (response.ok) {
-                    statusElement.textContent = `Paramètres sauvegardés pour le serveur ${guildId} : ${result.message}`;
-                    statusElement.classList.remove('status-error', 'hidden');
-                    statusElement.classList.add('status-success');
-                } else {
-                    statusElement.textContent = `Erreur lors de la sauvegarde : ${result.error || 'Erreur inconnue'}`;
-                    statusElement.classList.remove('status-success', 'hidden');
-                    statusElement.classList.add('status-error');
-                }
-            } catch (error) {
-                console.error('Erreur réseau lors de la sauvegarde des paramètres:', error);
-                statusElement.textContent = 'Erreur réseau: Impossible de se connecter au bot.';
-                statusElement.classList.remove('status-success', 'hidden');
-                statusElement.classList.add('status-error');
-            } finally {
-                statusElement.classList.remove('hidden');
-            }
-        }
-
-
-        async function sendMessageToChannel() {
-            const guildId = document.getElementById('targetGuildId').value; // Utilisez targetGuildId
-            const targetChannelId = document.getElementById('targetChannelId').value;
-            const messageContent = document.getElementById('messageContent').value;
-            const statusElement = document.getElementById('messageStatus');
-
-            if (!guildId || !targetChannelId || !messageContent) {
-                statusElement.textContent = "Veuillez remplir l'ID du serveur, l'ID du salon et le contenu du message.";
-                statusElement.classList.remove('status-success', 'hidden');
-                statusElement.classList.add('status-error');
-                return;
-            }
-
-            try {
-                const response = await fetch(`${API_BASE_URL}/message/send`, {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ guild_id: guildId, channel_id: targetChannelId, content: messageContent })
-                });
-                const result = await response.json();
-                if (response.ok) {
-                    statusElement.textContent = `Message envoyé au salon ${targetChannelId} sur le serveur ${guildId}.`;
-                    statusElement.classList.remove('status-error', 'hidden');
-                    statusElement.classList.add('status-success');
-                } else {
-                    statusElement.textContent = `Erreur lors de l'envoi : ${result.error || 'Erreur inconnue'}`;
-                    statusElement.classList.remove('status-success', 'hidden');
-                    statusElement.classList.add('status-error');
-                }
-            } catch (error) {
-                console.error('Erreur réseau lors de l\'envoi du message:', error);
-                statusElement.textContent = 'Erreur réseau: Impossible de se connecter au bot.';
-                statusElement.classList.remove('status-success', 'hidden');
-                statusElement.classList.add('status-error');
-            } finally {
-                statusElement.classList.remove('hidden');
-            }
-        }
-
-        async function syncCommands() {
-            const statusElement = document.getElementById('commandsStatus');
-            try {
-                const response = await fetch(`${API_BASE_URL}/commands/sync`, {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' }
-                });
-                const result = await response.json();
-                if (response.ok) {
-                    statusElement.textContent = `Synchronisation des commandes : ${result.message}`;
-                    statusElement.classList.remove('status-error', 'hidden');
-                    statusElement.classList.add('status-success');
-                } else {
-                    statusElement.textContent = `Erreur lors de la synchronisation : ${result.error || 'Erreur inconnue'}`;
-                    statusElement.classList.remove('status-success', 'hidden');
-                    statusElement.classList.add('status-error');
-                }
-            } catch (error) {
-                console.error('Erreur réseau lors de la synchronisation des commandes:', error);
-                statusElement.textContent = 'Erreur réseau: Impossible de se connecter au bot.';
-                statusElement.classList.remove('status-success', 'hidden');
-                statusElement.classList.add('status-error');
-            } finally {
-                statusElement.classList.remove('hidden');
-            }
-        }
-
-        // Add client ID to the Discord invite link
-        const addBotLink = document.querySelector('a[href*="YOUR_CLIENT_ID"]');
-        if (addBotLink) {
-            addBotLink.href = addBotLink.href.replace('YOUR_CLIENT_ID', BOT_CLIENT_ID); 
-        }
-    </script>
 </body>
 </html>
